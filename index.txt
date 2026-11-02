@@ -1,0 +1,1844 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sanctuary Rosary — Contemplative Prayer Companion</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Cormorant Garamond, Plus Jakarta Sans, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            parchment: {
+              50: '#FAF7F2',
+              100: '#F3EFE6',
+              200: '#E5DEC9',
+              300: '#D5CBB0',
+              800: '#292524',
+              900: '#1C1917',
+            },
+            vigil: {
+              950: '#0B0F17',
+              900: '#0F141C',
+              800: '#171F2C',
+              700: '#243044',
+            },
+            sacred: {
+              gold: '#B48327',
+              goldLight: '#D4AF37',
+              marian: '#1E3A5F',
+              marianLight: '#60A5FA',
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    :root {
+      --mystery-accent: #B48327;
+      --mystery-accent-soft: rgba(180, 131, 39, 0.14);
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      transition: background-color 0.35s ease, color 0.35s ease;
+    }
+
+    /* Subtle organic grain texture overlay */
+    .bg-sanctuary-grain {
+      background-image: radial-gradient(rgba(180, 131, 39, 0.06) 1px, transparent 0);
+      background-size: 24px 24px;
+    }
+
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(180, 131, 39, 0.3);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(180, 131, 39, 0.55);
+    }
+
+    /* SVG Bead Transitions & Halo Pulse */
+    .rosary-node {
+      cursor: pointer;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.25s ease;
+      transform-origin: center;
+      transform-box: fill-box;
+    }
+    .rosary-node:hover {
+      transform: scale(1.22);
+    }
+    .rosary-node-active {
+      transform: scale(1.28);
+    }
+
+    @keyframes haloPulse {
+      0%, 100% {
+        r: 13px;
+        opacity: 0.75;
+        stroke-width: 2px;
+      }
+      50% {
+        r: 19px;
+        opacity: 0.2;
+        stroke-width: 1px;
+      }
+    }
+    .active-halo-ring {
+      animation: haloPulse 2.4s infinite ease-in-out;
+      pointer-events: none;
+    }
+
+    @keyframes fadeSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-prayer-transition {
+      animation: fadeSlideUp 0.26s ease-out forwards;
+    }
+  </style>
+</head>
+
+<body class="bg-parchment-50 text-parchment-900 dark:bg-vigil-900 dark:text-parchment-50 min-h-screen flex flex-col bg-sanctuary-grain selection:bg-sacred-gold/20">
+
+  <!-- ==================== TOP HEADER BAR ==================== -->
+  <header class="sticky top-0 z-30 backdrop-blur-md bg-parchment-50/90 dark:bg-vigil-900/90 border-b border-parchment-200 dark:border-vigil-700 transition-colors">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Brand Title & Day Badge -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-parchment-100 dark:bg-vigil-800 border border-parchment-200 dark:border-vigil-700 flex items-center justify-center shadow-sm">
+          <!-- Marian Rose / Cross Emblem -->
+          <svg class="w-6 h-6 text-sacred-gold dark:text-sacred-goldLight" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18M7 8h10M12 8a4 4 0 100 8 4 4 0 000-8z" />
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-serif text-xl sm:text-2xl font-bold tracking-tight text-parchment-900 dark:text-parchment-50">
+              Sanctuary Rosary
+            </h1>
+            <span id="dayAutoBadge" class="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-parchment-100 dark:bg-vigil-800 text-stone-600 dark:text-stone-300 border border-parchment-200 dark:border-vigil-700">
+              <span class="w-1.5 h-1.5 rounded-full bg-sacred-gold"></span>
+              <span id="dayAutoBadgeText">Today's Mystery</span>
+            </span>
+          </div>
+          <p class="text-xs text-stone-500 dark:text-stone-400">
+            Contemplative Bead-by-Bead Guide &bull; <span id="currentScheduleHint">Liturgical Schedule</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Mystery Set Segmented Pill Selector (Manual Override + Auto Day Sync) -->
+      <div class="flex items-center gap-1.5 bg-parchment-100 dark:bg-vigil-800 p-1 rounded-xl border border-parchment-200 dark:border-vigil-700 overflow-x-auto max-w-full">
+        <button data-mystery-btn="joyful" onclick="selectMysterySet('joyful', true)" class="mystery-tab-btn px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap">
+          Joyful
+        </button>
+        <button data-mystery-btn="luminous" onclick="selectMysterySet('luminous', true)" class="mystery-tab-btn px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap">
+          Luminous
+        </button>
+        <button data-mystery-btn="sorrowful" onclick="selectMysterySet('sorrowful', true)" class="mystery-tab-btn px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap">
+          Sorrowful
+        </button>
+        <button data-mystery-btn="glorious" onclick="selectMysterySet('glorious', true)" class="mystery-tab-btn px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap">
+          Glorious
+        </button>
+        <button id="syncTodayBtn" onclick="syncToTodaysMystery()" title="Reset to Today's Liturgical Mystery" class="hidden px-2 py-1.5 rounded-lg text-xs font-medium text-sacred-gold dark:text-sacred-goldLight hover:bg-parchment-200/60 dark:hover:bg-vigil-700 transition-all whitespace-nowrap">
+          &#8635; Today
+        </button>
+      </div>
+
+      <!-- Utility Controls: Audio, Haptics, Prayer Editor, Theme -->
+      <div class="flex items-center gap-2">
+        <!-- Audio Toggle -->
+        <button id="audioToggleBtn" onclick="toggleAudio()" title="Toggle Synthesized Chime & Bead Click Audio" aria-label="Toggle Audio" class="p-2 rounded-xl bg-parchment-100 dark:bg-vigil-800 border border-parchment-200 dark:border-vigil-700 text-stone-700 dark:text-stone-200 hover:border-sacred-gold transition-colors flex items-center gap-1.5 text-xs font-medium">
+          <svg id="audioIconOn" class="w-4 h-4 text-sacred-gold dark:text-sacred-goldLight" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+          </svg>
+          <svg id="audioIconOff" class="w-4 h-4 hidden text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15zM17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+          </svg>
+          <span class="hidden md:inline">Sound</span>
+        </button>
+
+        <!-- Haptics Toggle -->
+        <button id="hapticToggleBtn" onclick="toggleHaptics()" title="Toggle Tactile Vibration Feedback" aria-label="Toggle Haptics" class="p-2 rounded-xl bg-parchment-100 dark:bg-vigil-800 border border-parchment-200 dark:border-vigil-700 text-stone-700 dark:text-stone-200 hover:border-sacred-gold transition-colors flex items-center gap-1.5 text-xs font-medium">
+          <svg id="hapticIcon" class="w-4 h-4 text-sacred-gold dark:text-sacred-goldLight" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+          </svg>
+          <span class="hidden md:inline">Haptics</span>
+        </button>
+
+        <!-- Prayer Text Editor Modal Trigger -->
+        <button onclick="openPrayerEditorModal()" title="Customize Prayer Texts (Stored in Browser)" class="px-3 py-2 rounded-xl bg-parchment-100 dark:bg-vigil-800 border border-parchment-200 dark:border-vigil-700 text-stone-800 dark:text-stone-100 hover:border-sacred-gold transition-colors flex items-center gap-1.5 text-xs font-semibold shadow-sm">
+          <svg class="w-4 h-4 text-sacred-gold dark:text-sacred-goldLight" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+          <span>Prayer Texts</span>
+        </button>
+
+        <!-- Theme Toggle (Parchment / Vigil Dark) -->
+        <button onclick="toggleTheme()" title="Switch Light Parchment / Nocturnal Vigil Theme" aria-label="Toggle Theme" class="p-2 rounded-xl bg-parchment-100 dark:bg-vigil-800 border border-parchment-200 dark:border-vigil-700 text-stone-700 dark:text-stone-200 hover:border-sacred-gold transition-colors">
+          <!-- Sun Icon -->
+          <svg id="themeIconSun" class="w-4 h-4 hidden text-sacred-goldLight" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+          <!-- Moon Icon -->
+          <svg id="themeIconMoon" class="w-4 h-4 text-stone-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN TWO-COLUMN SANCTUARY WORKSPACE ==================== -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-5 lg:py-8 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+
+    <!-- LEFT COLUMN: INTERACTIVE SVG ROSARY MAP (5 Columns on Desktop) -->
+    <section aria-label="Interactive Rosary Bead Map" class="lg:col-span-5 bg-parchment-100/80 dark:bg-vigil-800/80 border border-parchment-200 dark:border-vigil-700 rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col items-center justify-between relative overflow-hidden">
+      
+      <!-- Top Bar Inside Rosary Map Card -->
+      <div class="w-full flex items-center justify-between mb-1 z-10">
+        <div class="flex items-center gap-2">
+          <span class="font-mono text-xs uppercase tracking-wider text-stone-500 dark:text-stone-400" id="beadCounterBadge">
+            Step 1 / 67
+          </span>
+          <span class="text-stone-300 dark:text-stone-600">&bull;</span>
+          <span class="font-mono text-xs font-medium text-sacred-gold dark:text-sacred-goldLight" id="physicalBeadLabel">
+            Crucifix
+          </span>
+        </div>
+
+        <button onclick="resetRosaryProgress()" title="Return to the Crucifix" class="text-xs text-stone-500 dark:text-stone-400 hover:text-sacred-gold dark:hover:text-sacred-goldLight flex items-center gap-1 transition-colors px-2 py-1 rounded-lg hover:bg-parchment-200/50 dark:hover:bg-vigil-700/50">
+          <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+          <span>Reset</span>
+        </button>
+      </div>
+
+      <!-- Interactive SVG Rosary Container -->
+      <div class="relative w-full max-w-[390px] aspect-[440/530] flex items-center justify-center my-1">
+        <svg id="rosarySvg" viewBox="0 0 440 530" class="w-full h-full select-none overflow-visible" role="img" aria-label="Interactive 5-decade Rosary diagram">
+          <defs>
+            <!-- Radial Gradients for Beads -->
+            <radialGradient id="beadUnvisitedLight" cx="35%" cy="30%" r="70%">
+              <stop offset="0%" stop-color="#FAF7F2" />
+              <stop offset="60%" stop-color="#D6CEBF" />
+              <stop offset="100%" stop-color="#A89F91" />
+            </radialGradient>
+
+            <radialGradient id="beadUnvisitedDark" cx="35%" cy="30%" r="70%">
+              <stop offset="0%" stop-color="#475569" />
+              <stop offset="65%" stop-color="#283548" />
+              <stop offset="100%" stop-color="#151D2A" />
+            </radialGradient>
+
+            <radialGradient id="beadCompletedGrad" cx="35%" cy="30%" r="70%">
+              <stop offset="0%" stop-color="#F6E099" />
+              <stop offset="55%" stop-color="#C99733" />
+              <stop offset="100%" stop-color="#855E14" />
+            </radialGradient>
+
+            <radialGradient id="beadActiveGrad" cx="35%" cy="30%" r="70%">
+              <stop offset="0%" stop-color="#FFFBEB" />
+              <stop offset="45%" stop-color="#EAB308" />
+              <stop offset="100%" stop-color="#A16207" />
+            </radialGradient>
+
+            <radialGradient id="paterBeadGrad" cx="35%" cy="30%" r="70%">
+              <stop offset="0%" stop-color="#93C5FD" />
+              <stop offset="55%" stop-color="#2563EB" />
+              <stop offset="100%" stop-color="#1E3A8A" />
+            </radialGradient>
+
+            <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur stdDeviation="3.5" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+          </defs>
+
+          <!-- Rosary Chain Path Layer -->
+          <g id="rosaryChainLayer"></g>
+
+          <!-- Center Interior Medallion Summary (Inside the Loop) -->
+          <g id="loopCenterEmblem" transform="translate(220, 188)" class="pointer-events-none">
+            <circle r="86" class="fill-parchment-50/75 dark:fill-vigil-900/75 stroke-parchment-200 dark:stroke-vigil-700" stroke-width="1.2" stroke-dasharray="3 3" />
+            <text id="svgCenterMysteryTitle" y="-22" text-anchor="middle" class="font-serif text-[17px] font-bold fill-parchment-900 dark:fill-parchment-50">
+              Joyful Mysteries
+            </text>
+            <text id="svgCenterLatinTitle" y="-4" text-anchor="middle" class="font-serif italic text-[12px] fill-sacred-gold dark:fill-sacred-goldLight">
+              Mysteria Gaudiosa
+            </text>
+            <line x1="-36" y1="7" x2="36" y2="7" class="stroke-parchment-300 dark:stroke-vigil-700" stroke-width="1" />
+            <text id="svgCenterDecadeStatus" y="25" text-anchor="middle" class="font-mono text-[11px] uppercase tracking-widest fill-stone-600 dark:fill-stone-300">
+              Introductory Prayers
+            </text>
+            <text id="svgCenterSubStatus" y="43" text-anchor="middle" class="font-sans text-[10px] fill-stone-500 dark:fill-stone-400">
+              Click any bead to navigate
+            </text>
+          </g>
+
+          <!-- Interactive Beads Layer -->
+          <g id="rosaryNodesLayer"></g>
+        </svg>
+
+        <!-- Hover Tooltip for Beads -->
+        <div id="beadTooltip" class="pointer-events-none fixed z-50 hidden px-3 py-1.5 rounded-lg bg-parchment-900/95 dark:bg-vigil-950/95 text-parchment-50 text-xs font-medium shadow-lg border border-sacred-gold/40 whitespace-nowrap">
+          Bead Label
+        </div>
+      </div>
+
+      <!-- Quick Decade Jumper Pills -->
+      <div class="w-full pt-2 border-t border-parchment-200 dark:border-vigil-700 flex flex-wrap items-center justify-between gap-1.5">
+        <button onclick="jumpToSection('intro')" id="jumpBtn-intro" class="decade-jump-btn flex-1 py-1.5 px-2 rounded-lg text-[11px] font-mono font-medium border border-parchment-200 dark:border-vigil-700 transition-all text-center">
+          Intro
+        </button>
+        <button onclick="jumpToSection(1)" id="jumpBtn-1" class="decade-jump-btn flex-1 py-1.5 px-2 rounded-lg text-[11px] font-mono font-medium border border-parchment-200 dark:border-vigil-700 transition-all text-center">
+          I
+        </button>
+        <button onclick="jumpToSection(2)" id="jumpBtn-2" class="decade-jump-btn flex-1 py-1.5 px-2 rounded-lg text-[11px] font-mono font-medium border border-parchment-200 dark:border-vigil-700 transition-all text-center">
+          II
+        </button>
+        <button onclick="jumpToSection(3)" id="jumpBtn-3" class="decade-jump-btn flex-1 py-1.5 px-2 rounded-lg text-[11px] font-mono font-medium border border-parchment-200 dark:border-vigil-700 transition-all text-center">
+          III
+        </button>
+        <button onclick="jumpToSection(4)" id="jumpBtn-4" class="decade-jump-btn flex-1 py-1.5 px-2 rounded-lg text-[11px] font-mono font-medium border border-parchment-200 dark:border-vigil-700 transition-all text-center">
+          IV
+        </button>
+        <button onclick="jumpToSection(5)" id="jumpBtn-5" class="decade-jump-btn flex-1 py-1.5 px-2 rounded-lg text-[11px] font-mono font-medium border border-parchment-200 dark:border-vigil-700 transition-all text-center">
+          V
+        </button>
+        <button onclick="jumpToSection('closing')" id="jumpBtn-closing" class="decade-jump-btn flex-1 py-1.5 px-2 rounded-lg text-[11px] font-mono font-medium border border-parchment-200 dark:border-vigil-700 transition-all text-center">
+          Finis
+        </button>
+      </div>
+    </section>
+
+    <!-- RIGHT COLUMN: CONTEMPLATIVE MEDITATION & PRAYER SUITE (7 Columns on Desktop) -->
+    <section class="lg:col-span-7 flex flex-col gap-5">
+
+      <!-- 1. MYSTERY MEDITATION & SCRIPTURE CARD -->
+      <article id="mysteryCard" class="bg-parchment-100/90 dark:bg-vigil-800/90 border border-parchment-200 dark:border-vigil-700 rounded-2xl p-5 sm:p-6 shadow-sm relative overflow-hidden transition-all">
+        <!-- Decorative Top Accent Bar -->
+        <div id="mysteryAccentBar" class="absolute top-0 left-0 right-0 h-1 bg-sacred-gold transition-colors"></div>
+
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div class="flex items-center gap-2">
+            <span id="mysteryOrdinalBadge" class="px-2.5 py-0.5 rounded-full text-xs font-mono font-medium uppercase tracking-wider bg-sacred-gold/15 text-sacred-gold dark:text-sacred-goldLight border border-sacred-gold/30">
+              Preparatory Rite
+            </span>
+            <span id="mysteryFruitBadge" class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-parchment-200/70 dark:bg-vigil-700 text-stone-700 dark:text-stone-300">
+              Fruit: Recollection &amp; Faith
+            </span>
+          </div>
+
+          <span id="mysteryScriptureCitation" class="font-mono text-xs font-medium text-sacred-marian dark:text-sacred-marianLight bg-sacred-marian/10 dark:bg-sacred-marianLight/10 px-2.5 py-1 rounded-lg border border-sacred-marian/20 dark:border-sacred-marianLight/20">
+            Psalm 70:1 &bull; Apostles' Creed
+          </span>
+        </div>
+
+        <h2 id="mysteryCardTitle" class="font-serif text-2xl sm:text-3xl font-bold text-parchment-900 dark:text-parchment-50 leading-tight mb-2">
+          Entering into Sacred Silence
+        </h2>
+
+        <p id="mysteryMeditationText" class="font-serif text-base sm:text-lg text-stone-700 dark:text-stone-200 leading-relaxed italic">
+          Begin by placing yourself in the presence of God. Hold the Crucifix and trace the Sign of the Cross, professing the Apostles' Creed and asking for the theological virtues of Faith, Hope, and Charity.
+        </p>
+
+        <!-- Decade Mini Bead Progress Strip (Visible during Decades 1-5) -->
+        <div id="decadeProgressStrip" class="hidden mt-4 pt-3.5 border-t border-parchment-200/80 dark:border-vigil-700/80 flex items-center justify-between gap-2">
+          <span class="font-mono text-xs text-stone-500 dark:text-stone-400" id="decadeProgressLabel">
+            Decade Progress
+          </span>
+          <div id="decadeMiniDots" class="flex items-center gap-1.5 flex-wrap"></div>
+        </div>
+      </article>
+
+      <!-- 2. ACTIVE PRAYER DISPLAY CARD -->
+      <article id="prayerCardContainer" class="bg-parchment-50 dark:bg-vigil-800/50 border-2 border-parchment-200 dark:border-vigil-700 rounded-2xl p-5 sm:p-7 shadow-sm flex flex-col justify-between min-h-[260px] relative">
+        
+        <div>
+          <!-- Top Metadata Row -->
+          <div class="flex flex-wrap items-center justify-between gap-2 pb-3 mb-4 border-b border-parchment-200 dark:border-vigil-700">
+            <div class="flex items-center gap-2">
+              <span id="prayerStepBadge" class="font-mono text-xs uppercase tracking-wider px-2.5 py-1 rounded-md bg-parchment-100 dark:bg-vigil-800 text-stone-700 dark:text-stone-300 border border-parchment-200 dark:border-vigil-700">
+                Crucifix
+              </span>
+              <span id="prayerIntentionBadge" class="text-xs font-medium text-sacred-gold dark:text-sacred-goldLight">
+                Profession of Faith
+              </span>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <button onclick="toggleLatinDisplay()" id="latinToggleBtn" class="text-xs font-serif italic text-stone-500 dark:text-stone-400 hover:text-sacred-gold dark:hover:text-sacred-goldLight transition-colors">
+                Show Latin Incipit
+              </button>
+              <button onclick="openPrayerEditorForCurrent()" class="text-xs font-medium text-sacred-marian dark:text-sacred-marianLight hover:underline flex items-center gap-1">
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                </svg>
+                <span>Edit Text</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Prayer Heading -->
+          <div id="prayerContentAnimated" class="animate-prayer-transition">
+            <div class="flex flex-baseline justify-between gap-2 mb-2">
+              <h3 id="activePrayerTitle" class="font-serif text-2xl sm:text-3xl font-bold text-parchment-900 dark:text-parchment-50">
+                Sign of the Cross &amp; Apostles' Creed
+              </h3>
+              <span id="activePrayerLatinTitle" class="font-serif italic text-base sm:text-lg text-sacred-gold dark:text-sacred-goldLight shrink-0">
+                Symbolum Apostolorum
+              </span>
+            </div>
+
+            <!-- Prayer Body Text (Loaded from Modular Structure / localStorage) -->
+            <div id="activePrayerBody" class="font-serif text-lg sm:text-xl leading-relaxed text-stone-800 dark:text-stone-100 my-4 whitespace-pre-line">
+            </div>
+
+            <!-- Optional Latin Incipit Drawer -->
+            <div id="activePrayerLatinBox" class="hidden mt-3 p-3.5 rounded-xl bg-parchment-100/90 dark:bg-vigil-900/70 border border-parchment-200 dark:border-vigil-700 font-serif italic text-sm sm:text-base text-stone-600 dark:text-stone-300">
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Notice / Custom Status -->
+        <div class="mt-4 pt-3 border-t border-parchment-200/60 dark:border-vigil-700/60 flex flex-wrap items-center justify-between gap-2 text-xs text-stone-500 dark:text-stone-400">
+          <span id="customTextStatusIndicator" class="flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-sacred-gold/70"></span>
+            <span>Modular Incipit Mode &mdash; Click "Prayer Texts" to customize full wording in your browser.</span>
+          </span>
+          <span class="font-mono text-[11px] hidden sm:inline">Keys: &larr; / &rarr; or Space</span>
+        </div>
+      </article>
+
+      <!-- 3. TACTILE NAVIGATION CONTROLS -->
+      <div class="bg-parchment-100 dark:bg-vigil-800 border border-parchment-200 dark:border-vigil-700 rounded-2xl p-3.5 sm:p-4 shadow-sm flex items-center justify-between gap-3">
+        
+        <button id="prevBeadBtn" onclick="stepBead(-1)" class="flex items-center justify-center gap-2 px-4 sm:px-5 py-3 rounded-xl bg-parchment-50 dark:bg-vigil-900 border border-parchment-200 dark:border-vigil-700 text-stone-700 dark:text-stone-200 font-semibold text-sm hover:border-sacred-gold active:scale-[0.99] transition-all disabled:opacity-40 disabled:pointer-events-none">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+          <span>Previous Bead</span>
+        </button>
+
+        <!-- Overall Progress Bar in Center -->
+        <div class="hidden sm:flex flex-col flex-1 max-w-xs mx-2">
+          <div class="flex justify-between text-[11px] font-mono text-stone-500 dark:text-stone-400 mb-1">
+            <span id="progressSectionName">Introductory Rites</span>
+            <span id="progressPercentLabel">0%</span>
+          </div>
+          <div class="w-full h-2 rounded-full bg-parchment-200 dark:bg-vigil-900 overflow-hidden">
+            <div id="overallProgressBar" class="h-full bg-sacred-gold dark:bg-sacred-goldLight transition-all duration-300 rounded-full" style="width: 2%"></div>
+          </div>
+        </div>
+
+        <button id="nextBeadBtn" onclick="stepBead(1)" class="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-6 sm:px-8 py-3 rounded-xl bg-sacred-gold hover:bg-sacred-gold/90 text-white font-semibold text-sm shadow-sm active:scale-[0.99] transition-all">
+          <span id="nextBeadBtnText">Next Bead</span>
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- ==================== PRAYER TEXT EDITOR MODAL (localStorage) ==================== -->
+  <div id="prayerEditorModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/60 backdrop-blur-xs" role="dialog" aria-modal="true" aria-labelledby="modalEditorTitle">
+    <div class="bg-parchment-50 dark:bg-vigil-900 border border-parchment-200 dark:border-vigil-700 rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-prayer-transition">
+      
+      <!-- Modal Header -->
+      <div class="px-6 py-4 bg-parchment-100 dark:bg-vigil-800 border-b border-parchment-200 dark:border-vigil-700 flex items-center justify-between">
+        <div>
+          <h2 id="modalEditorTitle" class="font-serif text-xl sm:text-2xl font-bold text-parchment-900 dark:text-parchment-50">
+            Customizable Prayer Text Editor
+          </h2>
+          <p class="text-xs text-stone-500 dark:text-stone-400">
+            Personalize prayer strings saved locally in your browser (<code class="font-mono">localStorage</code>).
+          </p>
+        </div>
+        <button onclick="closePrayerEditorModal()" aria-label="Close Modal" class="p-2 rounded-lg text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 hover:bg-parchment-200/50 dark:hover:bg-vigil-700">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-6 overflow-y-auto space-y-5 flex-1">
+        <!-- Selector for which Prayer to edit -->
+        <div>
+          <label for="editorPrayerSelect" class="block text-xs font-semibold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-2">
+            Select Prayer to View or Customize
+          </label>
+          <select id="editorPrayerSelect" onchange="handleEditorPrayerChange()" class="w-full px-3.5 py-2.5 rounded-xl bg-parchment-100 dark:bg-vigil-800 border border-parchment-200 dark:border-vigil-700 text-sm font-medium text-parchment-900 dark:text-parchment-50 focus:outline-none focus:border-sacred-gold">
+          </select>
+        </div>
+
+        <!-- Metadata Display -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 rounded-xl bg-parchment-100/70 dark:bg-vigil-800/60 border border-parchment-200 dark:border-vigil-700 text-xs">
+          <div>
+            <span class="text-stone-400 block">Traditional Title:</span>
+            <span id="editorMetaTitle" class="font-semibold text-stone-800 dark:text-stone-200"></span>
+          </div>
+          <div>
+            <span class="text-stone-400 block">Latin Incipit:</span>
+            <span id="editorMetaLatin" class="font-serif italic text-sacred-gold dark:text-sacred-goldLight"></span>
+          </div>
+        </div>
+
+        <!-- Editable Prayer Textarea -->
+        <div>
+          <div class="flex items-center justify-between mb-1.5">
+            <label for="editorPrayerTextarea" class="text-xs font-semibold uppercase tracking-wider text-stone-500 dark:text-stone-400">
+              Displayed Prayer Text / Incipit
+            </label>
+            <button onclick="resetCurrentPrayerToDefault()" class="text-xs text-sacred-gold dark:text-sacred-goldLight hover:underline">
+              Restore Default Incipit
+            </button>
+          </div>
+          <textarea id="editorPrayerTextarea" rows="6" class="w-full p-4 rounded-xl bg-white dark:bg-vigil-950 border border-parchment-200 dark:border-vigil-700 font-serif text-base sm:text-lg text-parchment-900 dark:text-parchment-50 focus:outline-none focus:border-sacred-gold leading-relaxed" placeholder="Enter your preferred prayer text or meditation..."></textarea>
+          <p class="mt-1.5 text-xs text-stone-500 dark:text-stone-400">
+            Changes are saved to your browser's <code class="font-mono">localStorage</code> and immediately reflected on the Rosary prayer cards.
+          </p>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-6 py-4 bg-parchment-100 dark:bg-vigil-800 border-t border-parchment-200 dark:border-vigil-700 flex flex-wrap items-center justify-between gap-3">
+        <button onclick="resetAllPrayersToDefault()" class="px-3.5 py-2 rounded-xl text-xs font-medium text-red-700 dark:text-red-400 hover:bg-red-500/10 border border-transparent hover:border-red-500/20 transition-colors">
+          Reset All to Default Incipits
+        </button>
+
+        <div class="flex items-center gap-2">
+          <button onclick="closePrayerEditorModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-stone-600 dark:text-stone-300 hover:bg-parchment-200 dark:hover:bg-vigil-700 transition-colors">
+            Cancel
+          </button>
+          <button onclick="savePrayerFromEditor()" class="px-5 py-2 rounded-xl text-xs font-semibold bg-sacred-gold hover:bg-sacred-gold/90 text-white shadow-sm transition-all">
+            Save Prayer Text
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast Notification Banner -->
+  <div id="toastBanner" class="fixed bottom-5 right-5 z-50 hidden px-4 py-2.5 rounded-xl bg-parchment-900 dark:bg-vigil-950 text-parchment-50 text-xs font-medium shadow-xl border border-sacred-gold/40 flex items-center gap-2">
+    <span class="w-2 h-2 rounded-full bg-sacred-gold"></span>
+    <span id="toastMessage">Saved</span>
+  </div>
+
+  <!-- ==================== APPLICATION LOGIC ==================== -->
+  <script>
+    /*************************************************************************
+     * 1. MODULAR PRAYER DATA STRUCTURE (INCIPITS & PLACEHOLDERS ONLY)
+     * Adheres strictly to modular incipit structure; users can customize
+     * full texts in the localStorage Prayer Text Editor modal.
+     *************************************************************************/
+    const STORAGE_KEY_PRAYERS = 'sanctuary_rosary_custom_prayers_v1';
+    const STORAGE_KEY_SETTINGS = 'sanctuary_rosary_settings_v1';
+
+    const DEFAULT_PRAYER_LIBRARY = {
+      sign_and_creed: {
+        id: 'sign_and_creed',
+        title: "Sign of the Cross & Apostles' Creed",
+        latinTitle: 'Signum Crucis & Symbolum Apostolorum',
+        defaultText: "In the name of the Father, and of the Son, and of the Holy Spirit…\n\nI believe in God, the Father Almighty, Creator of heaven and earth… [Apostles' Creed incipit — click 'Edit Text' to customize full prayer wording]",
+        latinIncipit: 'In nomine Patris, et Filii, et Spiritus Sancti. Amen. Credo in Deum Patrem omnipotentem, Creatorem caeli et terrae…'
+      },
+      our_father: {
+        id: 'our_father',
+        title: 'Our Father (The Lord’s Prayer)',
+        latinTitle: 'Pater Noster',
+        defaultText: "Our Father, who art in heaven, hallowed be thy name… [Lord's Prayer incipit — click 'Edit Text' to customize full prayer wording]",
+        latinIncipit: 'Pater noster, qui es in caelis, sanctificetur nomen tuum. Adveniat regnum tuum…'
+      },
+      hail_mary: {
+        id: 'hail_mary',
+        title: 'Hail Mary (Angelical Salutation)',
+        latinTitle: 'Ave Maria',
+        defaultText: "Hail Mary, full of grace, the Lord is with thee… [Ave Maria incipit — click 'Edit Text' to customize full prayer wording]",
+        latinIncipit: 'Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus…'
+      },
+      glory_be: {
+        id: 'glory_be',
+        title: 'Glory Be (Minor Doxology)',
+        latinTitle: 'Gloria Patri',
+        defaultText: "Glory be to the Father, and to the Son, and to the Holy Spirit… [Minor Doxology incipit — click 'Edit Text' to customize full prayer wording]",
+        latinIncipit: 'Gloria Patri, et Filio, et Spiritui Sancto. Sicut erat in principio…'
+      },
+      decade_doxology: {
+        id: 'decade_doxology',
+        title: 'Glory Be & Fatima Decade Prayer',
+        latinTitle: 'Gloria Patri & Oratio Fatimae',
+        defaultText: "Glory be to the Father, and to the Son, and to the Holy Spirit…\n\nO my Jesus, forgive us our sins, save us from the fires of hell… [Decade Doxology & Fatima Prayer incipits — click 'Edit Text' to customize]",
+        latinIncipit: 'Gloria Patri, et Filio, et Spiritui Sancto… Domine Iesu, dimitte nobis debita nostra…'
+      },
+      hail_holy_queen: {
+        id: 'hail_holy_queen',
+        title: 'Hail, Holy Queen & Concluding Prayer',
+        latinTitle: 'Salve Regina & Oratio Conclusiva',
+        defaultText: "Hail, holy Queen, Mother of mercy, our life, our sweetness, and our hope…\n\nV. Pray for us, O holy Mother of God.\nR. That we may be made worthy of the promises of Christ.\n\nLet us pray: O God, whose only begotten Son, by His life, death, and resurrection… [Closing Marian Anthem incipit — click 'Edit Text' to customize]",
+        latinIncipit: 'Salve, Regina, Mater misericordiae, vita, dulcedo, et spes nostra, salve…'
+      }
+    };
+
+    /*************************************************************************
+     * 2. LITURGICAL MYSTERIES DATABASE (20 Mysteries with Scripture & Fruits)
+     *************************************************************************/
+    const MYSTERY_SETS = {
+      joyful: {
+        id: 'joyful',
+        name: 'Joyful Mysteries',
+        latinName: 'Mysteria Gaudiosa',
+        daysLabel: 'Mondays & Saturdays',
+        accentColor: '#B48327',
+        mysteries: [
+          {
+            number: 1,
+            ordinal: 'First Joyful Mystery',
+            title: 'The Annunciation',
+            scripture: 'Luke 1:26–38',
+            fruit: 'Humility',
+            meditation: 'Contemplate the Archangel Gabriel greeting the Virgin Mary in Nazareth. With serene humility and trust in God’s word, Mary responds: "Behold the handmaid of the Lord; be it done unto me according to thy word."'
+          },
+          {
+            number: 2,
+            ordinal: 'Second Joyful Mystery',
+            title: 'The Visitation',
+            scripture: 'Luke 1:39–56',
+            fruit: 'Love of Neighbor & Charity',
+            meditation: 'Bearing Christ within her, Mary hastens through the hill country of Judea to assist her cousin Elizabeth. At the sound of Mary’s voice, John the Baptist leaps for joy, and Mary proclaims the Magnificat.'
+          },
+          {
+            number: 3,
+            ordinal: 'Third Joyful Mystery',
+            title: 'The Nativity of Our Lord',
+            scripture: 'Luke 2:1–20',
+            fruit: 'Detachment & Poverty of Spirit',
+            meditation: 'In the quiet stillness of Bethlehem, the Eternal Word enters the world in poverty and gentleness, wrapped in swaddling clothes and laid in a manger while choirs of angels announce peace on earth.'
+          },
+          {
+            number: 4,
+            ordinal: 'Fourth Joyful Mystery',
+            title: 'The Presentation in the Temple',
+            scripture: 'Luke 2:22–38',
+            fruit: 'Obedience & Purity',
+            meditation: 'Mary and Joseph bring the infant Jesus to the Temple in Jerusalem in obedience to the Law of Moses. Righteous Simeon receives the Child in his arms, praising God for the Light of revelation to the nations.'
+          },
+          {
+            number: 5,
+            ordinal: 'Fifth Joyful Mystery',
+            title: 'The Finding in the Temple',
+            scripture: 'Luke 2:41–52',
+            fruit: 'Joy in Seeking God',
+            meditation: 'After three days of sorrowful searching, Mary and Joseph find the twelve-year-old Jesus in the Temple amidst the teachers, listening and asking questions, wholly dedicated to His Father’s house.'
+          }
+        ]
+      },
+      luminous: {
+        id: 'luminous',
+        name: 'Luminous Mysteries',
+        latinName: 'Mysteria Luminosa',
+        daysLabel: 'Thursdays',
+        accentColor: '#0284C7',
+        mysteries: [
+          {
+            number: 1,
+            ordinal: 'First Luminous Mystery',
+            title: 'The Baptism in the Jordan',
+            scripture: 'Matthew 3:13–17',
+            fruit: 'Openness to the Holy Spirit',
+            meditation: 'As Jesus rises from the waters of the Jordan River, the heavens open, the Spirit descends like a dove, and the voice of the Father declares: "This is my beloved Son, with whom I am well pleased."'
+          },
+          {
+            number: 2,
+            ordinal: 'Second Luminous Mystery',
+            title: 'The Wedding Feast at Cana',
+            scripture: 'John 2:1–12',
+            fruit: 'To Jesus through Mary',
+            meditation: 'At Mary’s compassionate intercession—"Do whatever He tells you"—Jesus performs His first public sign, transforming water into choice wine and awakening the faith of His disciples.'
+          },
+          {
+            number: 3,
+            ordinal: 'Third Luminous Mystery',
+            title: 'The Proclamation of the Kingdom',
+            scripture: 'Mark 1:14–15 • Matthew 5:1–12',
+            fruit: 'Repentance & Trust in God',
+            meditation: 'Jesus journeys through Galilee proclaiming the Beatitudes, healing the brokenhearted, forgiving sins, and announcing that the Kingdom of God is at hand for all who convert and believe.'
+          },
+          {
+            number: 4,
+            ordinal: 'Fourth Luminous Mystery',
+            title: 'The Transfiguration',
+            scripture: 'Luke 9:28–36',
+            fruit: 'Desire for Holiness',
+            meditation: 'Upon Mount Tabor, the glory of Christ’s divinity shines forth before Peter, James, and John. His face radiates like the sun and His garments become dazzling white as He strengthens them for the Passion.'
+          },
+          {
+            number: 5,
+            ordinal: 'Fifth Luminous Mystery',
+            title: 'The Institution of the Eucharist',
+            scripture: 'Luke 22:14–20 • John 13:1',
+            fruit: 'Eucharistic Adoration & Unity',
+            meditation: 'Having loved His own who were in the world, Jesus loves them to the end—offering His Body and Blood under the signs of bread and wine at the Last Supper as our perpetual spiritual nourishment.'
+          }
+        ]
+      },
+      sorrowful: {
+        id: 'sorrowful',
+        name: 'Sorrowful Mysteries',
+        latinName: 'Mysteria Dolorosa',
+        daysLabel: 'Tuesdays & Fridays',
+        accentColor: '#881337',
+        mysteries: [
+          {
+            number: 1,
+            ordinal: 'First Sorrowful Mystery',
+            title: 'The Agony in the Garden',
+            scripture: 'Matthew 26:36–46',
+            fruit: 'Contrition & Conformity to God’s Will',
+            meditation: 'Beneath the olive trees of Gethsemane, Jesus enters into deep interior anguish for the sins of humanity, praying with surrendered love: "Father, not my will, but thine be done."'
+          },
+          {
+            number: 2,
+            ordinal: 'Second Sorrowful Mystery',
+            title: 'The Scourging at the Pillar',
+            scripture: 'John 19:1 • Isaiah 53:5',
+            fruit: 'Mortification & Purity of Senses',
+            meditation: 'Bound to the stone pillar, the innocent Lamb of God endures cruel scourging in silent patience, bearing our infirmities so that by His wounds we might be healed.'
+          },
+          {
+            number: 3,
+            ordinal: 'Third Sorrowful Mystery',
+            title: 'The Crowning with Thorns',
+            scripture: 'Matthew 27:27–31',
+            fruit: 'Moral Courage & Reign of Christ in Our Heart',
+            meditation: 'Mocked with a purple cloak and a reed scepter, Jesus accepts a sharp crown of thorns pressed upon His sacred head, reigning as King of Truth through humility and meekness.'
+          },
+          {
+            number: 4,
+            ordinal: 'Fourth Sorrowful Mystery',
+            title: 'The Carrying of the Cross',
+            scripture: 'Luke 23:26–32',
+            fruit: 'Patience in Trials',
+            meditation: 'Embracing the heavy wood of the Cross along the Via Dolorosa, Jesus meets His sorrowful Mother, receives the aid of Simon of Cyrene, and calls us to take up our cross daily and follow Him.'
+          },
+          {
+            number: 5,
+            ordinal: 'Fifth Sorrowful Mystery',
+            title: 'The Crucifixion and Death of Our Lord',
+            scripture: 'Luke 23:33–46 • John 19:25–30',
+            fruit: 'Perseverance & Forgiveness of Enemies',
+            meditation: 'Lifted up on Calvary between heaven and earth, Jesus forgives His executioners, entrusts Mary and the beloved disciple to one another, and breathes forth His Spirit for the redemption of the world.'
+          }
+        ]
+      },
+      glorious: {
+        id: 'glorious',
+        name: 'Glorious Mysteries',
+        latinName: 'Mysteria Gloriosa',
+        daysLabel: 'Wednesdays & Sundays',
+        accentColor: '#6D28D9',
+        mysteries: [
+          {
+            number: 1,
+            ordinal: 'First Glorious Mystery',
+            title: 'The Resurrection',
+            scripture: 'Luke 24:1–12 • John 20:19–20',
+            fruit: 'Living Faith',
+            meditation: 'At dawn on the first day of the week, the stone is rolled away and Christ rises triumphant over death, greeting His disciples with the Easter gift: "Peace be with you."'
+          },
+          {
+            number: 2,
+            ordinal: 'Second Glorious Mystery',
+            title: 'The Ascension',
+            scripture: 'Acts 1:6–11 • Luke 24:50–53',
+            fruit: 'Christian Hope & Desire for Heaven',
+            meditation: 'Forty days after Easter, Jesus blesses His apostles on the Mount of Olives and ascends into heaven, preparing a place for us at the right hand of the Father.'
+          },
+          {
+            number: 3,
+            ordinal: 'Third Glorious Mystery',
+            title: 'The Descent of the Holy Spirit',
+            scripture: 'Acts 2:1–11',
+            fruit: 'Wisdom & Apostolic Zeal',
+            meditation: 'Gathered in prayer with Mary in the Upper Room at Pentecost, the disciples are filled with the Holy Spirit as tongues of fire rest upon them, sending them forth to the ends of the earth.'
+          },
+          {
+            number: 4,
+            ordinal: 'Fourth Glorious Mystery',
+            title: 'The Assumption of the Blessed Virgin Mary',
+            scripture: 'Revelation 12:1 • Song of Songs 2:10',
+            fruit: 'Grace of a Happy Death & Devotion to Mary',
+            meditation: 'At the completion of her earthly course, the Immaculate Mother of God is taken up body and soul into heavenly glory, a radiant sign of hope and comfort for the pilgrim Church.'
+          },
+          {
+            number: 5,
+            ordinal: 'Fifth Glorious Mystery',
+            title: 'The Coronation of Mary as Queen of Heaven',
+            scripture: 'Revelation 12:1 • Judith 15:9–10',
+            fruit: 'Perseverance & Trust in Mary’s Intercession',
+            meditation: 'Crowned with twelve stars by her Divine Son, Mary shines as Queen of Heaven and Earth, ceaselessly interceding as Mother of Mercy for all her children.'
+          }
+        ]
+      }
+    };
+
+    /*************************************************************************
+     * 3. BUILD COMPLETE 67-STEP ROSARY SEQUENCE & SVG GEOMETRY
+     * Includes:
+     * - Crucifix (0)
+     * - Intro Pater (1), 3 Intro Aves (2,3,4), Intro Glory Be Clasp (5)
+     * - 5 Decades x [1 Pater Bead + 10 Ave Beads + 1 Doxology Clasp] (6..65)
+     * - Closing Medallion: Hail Holy Queen & Final Prayer (66)
+     *************************************************************************/
+    const ROSARY_STEPS = [];
+
+    function buildRosarySteps() {
+      ROSARY_STEPS.length = 0;
+
+      // Pendant Tail coordinates (Bottom Crucifix moving up to Centerpiece Medallion)
+      // Crucifix at (220, 496), Medallion at (220, 355)
+      ROSARY_STEPS.push({
+        stepIndex: 0,
+        nodeType: 'crucifix',
+        section: 'intro',
+        decade: 0,
+        beadInDecade: 0,
+        prayerId: 'sign_and_creed',
+        shortLabel: 'Crucifix',
+        intention: 'Profession of Faith & Sign of the Cross',
+        x: 220,
+        y: 494
+      });
+
+      ROSARY_STEPS.push({
+        stepIndex: 1,
+        nodeType: 'pater',
+        section: 'intro',
+        decade: 0,
+        beadInDecade: 0,
+        prayerId: 'our_father',
+        shortLabel: 'Introductory Our Father',
+        intention: 'For the intentions of the Church & Opening Recollection',
+        x: 220,
+        y: 452
+      });
+
+      const introIntentions = [
+        'For an increase in the virtue of Faith',
+        'For an increase in the virtue of Hope',
+        'For an increase in the virtue of Charity'
+      ];
+      const introYs = [428, 410, 392];
+
+      for (let i = 0; i < 3; i++) {
+        ROSARY_STEPS.push({
+          stepIndex: 2 + i,
+          nodeType: 'ave',
+          section: 'intro',
+          decade: 0,
+          beadInDecade: i + 1,
+          prayerId: 'hail_mary',
+          shortLabel: `Introductory Hail Mary (${i + 1}/3)`,
+          intention: introIntentions[i],
+          x: 220,
+          y: introYs[i]
+        });
+      }
+
+      ROSARY_STEPS.push({
+        stepIndex: 5,
+        nodeType: 'doxology',
+        section: 'intro',
+        decade: 0,
+        beadInDecade: 0,
+        prayerId: 'glory_be',
+        shortLabel: 'Introductory Glory Be',
+        intention: 'Doxology concluding the Introductory Prayers',
+        x: 220,
+        y: 374
+      });
+
+      // 5-Decade Loop Geometry
+      // Center of loop at (220, 190), rx = 166, ry = 158, slightly tapered toward bottom medallion (220, 355)
+      // Angle parameter t goes from 0 to 1 clockwise starting at bottom-left of Medallion and ending at bottom-right of Medallion.
+      // To create authentic visual separation between decades, each decade has:
+      // - 1 Large Pater bead (isolated with chain spacing before & after)
+      // - 10 Small Ave beads (clustered smoothly)
+      // - 1 Golden Doxology clasp before the next Pater bead
+      const loopUnits = [];
+      let cumulativeArc = 0;
+
+      for (let d = 1; d <= 5; d++) {
+        // Gap before Large Pater Bead
+        cumulativeArc += (d === 1) ? 1.55 : 1.45;
+        loopUnits.push({
+          decade: d,
+          nodeType: 'pater',
+          beadInDecade: 0,
+          prayerId: 'our_father',
+          shortLabel: `Decade ${d} • Mystery & Our Father`,
+          intention: `Announce Mystery ${d} & Pray Our Father`,
+          arcPos: cumulativeArc
+        });
+
+        // Gap after Large Pater Bead before 1st Ave
+        cumulativeArc += 1.55;
+
+        for (let a = 1; a <= 10; a++) {
+          if (a > 1) cumulativeArc += 0.92;
+          loopUnits.push({
+            decade: d,
+            nodeType: 'ave',
+            beadInDecade: a,
+            prayerId: 'hail_mary',
+            shortLabel: `Decade ${d} • Hail Mary ${a}/10`,
+            intention: `Contemplating Mystery ${d} (Bead ${a} of 10)`,
+            arcPos: cumulativeArc
+          });
+        }
+
+        // Doxology clasp on the chain after 10th Ave bead
+        cumulativeArc += 1.25;
+        loopUnits.push({
+          decade: d,
+          nodeType: 'doxology',
+          beadInDecade: 11,
+          prayerId: 'decade_doxology',
+          shortLabel: `Decade ${d} • Glory Be & Fatima Prayer`,
+          intention: `Concluding Decade ${d} with Glory Be & Fatima Prayer`,
+          arcPos: cumulativeArc
+        });
+      }
+
+      const totalArcSpan = cumulativeArc + 1.45;
+
+      // Helper to convert normalized parameter u in (0, 1) to teardrop-ellipse (x, y)
+      // u = 0 is bottom center (220, 355), moving clockwise:
+      // left side (u < 0.5), top center (u = 0.5), right side (u > 0.5)
+      function getLoopPoint(u) {
+        // Angle theta: at u=0, bottom (pi/2). Moving clockwise in screen coords (y down):
+        // theta goes from pi/2 -> pi (left) -> 3pi/2 (top) -> 2pi (right) -> 5pi/2 (bottom)
+        const theta = (Math.PI / 2) + u * (2 * Math.PI);
+        const cx = 220;
+        const cy = 190;
+        const rx = 166;
+        const ry = 158;
+
+        // Teardrop pinch factor near bottom (sin(theta) near 1)
+        const bottomFactor = Math.max(0, Math.sin(theta));
+        const pinchX = 1 - 0.16 * Math.pow(bottomFactor, 2.2);
+
+        const x = cx + rx * pinchX * Math.cos(theta);
+        const y = cy + ry * Math.sin(theta) + (8 * Math.pow(bottomFactor, 3));
+        return { x: Number(x.toFixed(1)), y: Number(y.toFixed(1)) };
+      }
+
+      loopUnits.forEach((unit, idx) => {
+        const u = unit.arcPos / totalArcSpan;
+        const pt = getLoopPoint(u);
+        ROSARY_STEPS.push({
+          stepIndex: 6 + idx,
+          nodeType: unit.nodeType,
+          section: unit.decade,
+          decade: unit.decade,
+          beadInDecade: unit.beadInDecade,
+          prayerId: unit.prayerId,
+          shortLabel: unit.shortLabel,
+          intention: unit.intention,
+          x: pt.x,
+          y: pt.y
+        });
+      });
+
+      // Final Step (66): Centerpiece Medallion (Hail Holy Queen & Concluding Prayer)
+      ROSARY_STEPS.push({
+        stepIndex: 66,
+        nodeType: 'medallion',
+        section: 'closing',
+        decade: 0,
+        beadInDecade: 0,
+        prayerId: 'hail_holy_queen',
+        shortLabel: 'Centerpiece Medallion • Salve Regina',
+        intention: 'Concluding Marian Anthem & Rosary Prayer',
+        x: 220,
+        y: 353
+      });
+    }
+
+    /*************************************************************************
+     * 4. APPLICATION STATE & SETTINGS
+     *************************************************************************/
+    const state = {
+      currentStep: 0,
+      mysterySetId: 'joyful',
+      isManualMysteryOverride: false,
+      todaysMysteryId: 'joyful',
+      todaysDayName: 'Monday',
+      showLatin: false,
+      audioEnabled: true,
+      hapticsEnabled: true,
+      darkMode: false,
+      customPrayers: {}
+    };
+
+    /*************************************************************************
+     * 5. WEB AUDIO API SYNTHESIZER (WOODEN BEAD CLICK & SINGING BELL CHIME)
+     *************************************************************************/
+    let audioCtx = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+          audioCtx = new AudioContextClass();
+        }
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playRosarySound(nodeType) {
+      if (!state.audioEnabled) return;
+      try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+
+        if (nodeType === 'pater' || nodeType === 'medallion' || nodeType === 'crucifix') {
+          // Warm Liturgical Bell / Singing Bowl Chime
+          const baseFreq = nodeType === 'medallion' ? 528 : 440;
+          const harmonics = [1, 2.0, 2.756];
+          const gains = [0.11, 0.045, 0.02];
+
+          harmonics.forEach((mult, i) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(baseFreq * mult, now);
+
+            gain.gain.setValueAtTime(0.0001, now);
+            gain.gain.linearRampToValueAtTime(gains[i], now + 0.015);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + (1.3 - i * 0.3));
+
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + 1.35);
+          });
+        } else if (nodeType === 'doxology') {
+          // Subtle Golden Clasp Shimmer
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(660, now);
+          osc.frequency.exponentialRampToValueAtTime(880, now + 0.12);
+
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(0.06, now + 0.01);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.32);
+
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.35);
+        } else {
+          // Tactile Olive-Wood Bead Click
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(290, now);
+          osc.frequency.exponentialRampToValueAtTime(115, now + 0.045);
+
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(0.14, now + 0.004);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.055);
+
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.06);
+        }
+      } catch (e) {
+        // Ignore audio errors if blocked by browser autoplay policy
+      }
+    }
+
+    function triggerHaptic(nodeType) {
+      if (!state.hapticsEnabled) return;
+      try {
+        if ('vibrate' in navigator) {
+          if (nodeType === 'pater' || nodeType === 'medallion') {
+            navigator.vibrate([22, 35, 22]);
+          } else {
+            navigator.vibrate(12);
+          }
+        }
+      } catch (e) {
+        // Ignore unsupported vibration API
+      }
+    }
+
+    /*************************************************************************
+     * 6. AUTOMATIC DAY-OF-THE-WEEK MYSTERY DETECTION
+     *************************************************************************/
+    function detectTodaysMystery() {
+      const dayIndex = new Date().getDay(); // 0 = Sun, 1 = Mon, ..., 6 = Sat
+      const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const dayToMysteryMap = {
+        0: 'glorious',  // Sunday
+        1: 'joyful',    // Monday
+        2: 'sorrowful', // Tuesday
+        3: 'glorious',  // Wednesday
+        4: 'luminous',  // Thursday
+        5: 'sorrowful', // Friday
+        6: 'joyful'     // Saturday
+      };
+
+      state.todaysDayName = dayNames[dayIndex];
+      state.todaysMysteryId = dayToMysteryMap[dayIndex];
+      state.mysterySetId = state.todaysMysteryId;
+      state.isManualMysteryOverride = false;
+    }
+
+    function selectMysterySet(mysteryId, isManual = true) {
+      if (!MYSTERY_SETS[mysteryId]) return;
+      state.mysterySetId = mysteryId;
+      state.isManualMysteryOverride = isManual && (mysteryId !== state.todaysMysteryId);
+      updateMysteryHeaderUI();
+      renderCurrentStepUI();
+      renderSvgRosaryState();
+    }
+
+    function syncToTodaysMystery() {
+      selectMysterySet(state.todaysMysteryId, false);
+      showToast(`Synced to ${state.todaysDayName}'s ${MYSTERY_SETS[state.todaysMysteryId].name}`);
+    }
+
+    function updateMysteryHeaderUI() {
+      const activeSet = MYSTERY_SETS[state.mysterySetId];
+      document.documentElement.style.setProperty('--mystery-accent', activeSet.accentColor);
+
+      // Update Segmented Pill Buttons
+      document.querySelectorAll('.mystery-tab-btn').forEach(btn => {
+        const id = btn.getAttribute('data-mystery-btn');
+        if (id === state.mysterySetId) {
+          btn.className = 'mystery-tab-btn px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all whitespace-nowrap bg-sacred-gold text-white shadow-xs';
+        } else {
+          btn.className = 'mystery-tab-btn px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap text-stone-600 dark:text-stone-300 hover:bg-parchment-200/60 dark:hover:bg-vigil-700';
+        }
+      });
+
+      const badgeText = document.getElementById('dayAutoBadgeText');
+      const syncBtn = document.getElementById('syncTodayBtn');
+      const scheduleHint = document.getElementById('currentScheduleHint');
+
+      if (state.isManualMysteryOverride) {
+        badgeText.textContent = `Manual Selection (${activeSet.name})`;
+        syncBtn.classList.remove('hidden');
+      } else {
+        badgeText.textContent = `${state.todaysDayName} • ${activeSet.name}`;
+        syncBtn.classList.add('hidden');
+      }
+      scheduleHint.textContent = `${activeSet.name} (${activeSet.daysLabel})`;
+    }
+
+    /*************************************************************************
+     * 7. RENDER INTERACTIVE SVG ROSARY DIAGRAM
+     *************************************************************************/
+    function buildSvgRosaryElements() {
+      const chainLayer = document.getElementById('rosaryChainLayer');
+      const nodesLayer = document.getElementById('rosaryNodesLayer');
+      chainLayer.innerHTML = '';
+      nodesLayer.innerHTML = '';
+
+      // 1. Draw Continuous Chain Paths
+      // Pendant Chain from Crucifix (step 0) up to Medallion (step 66)
+      const pendantPath = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      pendantPath.setAttribute('x1', '220');
+      pendantPath.setAttribute('y1', '353');
+      pendantPath.setAttribute('x2', '220');
+      pendantPath.setAttribute('y2', '494');
+      pendantPath.setAttribute('class', 'stroke-stone-400/70 dark:stroke-stone-600');
+      pendantPath.setAttribute('stroke-width', '2.2');
+      pendantPath.setAttribute('stroke-dasharray', '3 2');
+      chainLayer.appendChild(pendantPath);
+
+      // Loop Chain connecting Medallion (66) -> Steps 6..65 -> Medallion (66)
+      const loopPoints = [`220,353`];
+      for (let i = 6; i <= 65; i++) {
+        loopPoints.push(`${ROSARY_STEPS[i].x},${ROSARY_STEPS[i].y}`);
+      }
+      loopPoints.push(`220,353`);
+
+      const loopPolyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+      loopPolyline.setAttribute('points', loopPoints.join(' '));
+      loopPolyline.setAttribute('fill', 'none');
+      loopPolyline.setAttribute('class', 'stroke-stone-400/75 dark:stroke-stone-600');
+      loopPolyline.setAttribute('stroke-width', '2');
+      loopPolyline.setAttribute('stroke-linejoin', 'round');
+      chainLayer.appendChild(loopPolyline);
+
+      // 2. Active Halo Ring Element (moves to current step)
+      const haloCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      haloCircle.setAttribute('id', 'svgActiveHalo');
+      haloCircle.setAttribute('r', '15');
+      haloCircle.setAttribute('fill', 'none');
+      haloCircle.setAttribute('stroke', '#D4AF37');
+      haloCircle.setAttribute('class', 'active-halo-ring');
+      nodesLayer.appendChild(haloCircle);
+
+      // 3. Render Every Node in ROSARY_STEPS
+      ROSARY_STEPS.forEach(step => {
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.setAttribute('id', `rosary-node-${step.stepIndex}`);
+        g.setAttribute('class', 'rosary-node');
+        g.setAttribute('tabindex', '0');
+        g.setAttribute('role', 'button');
+        g.setAttribute('aria-label', step.shortLabel);
+
+        g.addEventListener('click', () => goToStep(step.stepIndex));
+        g.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            goToStep(step.stepIndex);
+          }
+        });
+        g.addEventListener('mouseenter', (e) => showBeadTooltip(e, step.shortLabel));
+        g.addEventListener('mousemove', (e) => moveBeadTooltip(e));
+        g.addEventListener('mouseleave', hideBeadTooltip);
+
+        if (step.nodeType === 'crucifix') {
+          // Ornate Sanctuary Crucifix Vector at (220, 494)
+          const crossGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+          crossGroup.setAttribute('transform', `translate(${step.x}, ${step.y})`);
+
+          // Subtle Halo Disc behind Crucifix
+          const bgDisc = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          bgDisc.setAttribute('r', '20');
+          bgDisc.setAttribute('cy', '2');
+          bgDisc.setAttribute('class', 'fill-parchment-200/60 dark:fill-vigil-700/60');
+          crossGroup.appendChild(bgDisc);
+
+          const crossPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          crossPath.setAttribute('id', `node-shape-${step.stepIndex}`);
+          crossPath.setAttribute('d', 'M-3,-20 H3 V-9 H13 V-3 H3 V22 H-3 V-3 H-13 V-9 H-3 Z');
+          crossPath.setAttribute('stroke', '#78350F');
+          crossPath.setAttribute('stroke-width', '1.3');
+          crossPath.setAttribute('stroke-linejoin', 'round');
+          crossGroup.appendChild(crossPath);
+
+          // Inner Corpus / Cross Detail
+          const innerCross = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          innerCross.setAttribute('cx', '0');
+          innerCross.setAttribute('cy', '-6');
+          innerCross.setAttribute('r', '2.5');
+          innerCross.setAttribute('fill', '#FEF3C7');
+          crossGroup.appendChild(innerCross);
+
+          g.appendChild(crossGroup);
+
+        } else if (step.nodeType === 'medallion') {
+          // Marian Centerpiece Shield / Octagonal Medallion at (220, 353)
+          const medGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+          medGroup.setAttribute('transform', `translate(${step.x}, ${step.y})`);
+
+          const shield = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+          shield.setAttribute('id', `node-shape-${step.stepIndex}`);
+          shield.setAttribute('points', '0,-13 11,-7 11,6 0,14 -11,6 -11,-7');
+          shield.setAttribute('stroke', '#92400E');
+          shield.setAttribute('stroke-width', '1.5');
+          medGroup.appendChild(shield);
+
+          const mLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          mLabel.setAttribute('y', '3.5');
+          mLabel.setAttribute('text-anchor', 'middle');
+          mLabel.setAttribute('class', 'font-serif font-bold text-[10px] fill-parchment-900 pointer-events-none');
+          mLabel.textContent = 'M';
+          medGroup.appendChild(mLabel);
+
+          g.appendChild(medGroup);
+
+        } else if (step.nodeType === 'pater') {
+          // Large Pater / Mystery Divider Bead with Outer Ornamental Ring
+          const outerRing = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          outerRing.setAttribute('cx', step.x);
+          outerRing.setAttribute('cy', step.y);
+          outerRing.setAttribute('r', '10.5');
+          outerRing.setAttribute('fill', 'none');
+          outerRing.setAttribute('class', 'stroke-sacred-gold/50 dark:stroke-sacred-goldLight/40');
+          outerRing.setAttribute('stroke-width', '1.2');
+          g.appendChild(outerRing);
+
+          const bead = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          bead.setAttribute('id', `node-shape-${step.stepIndex}`);
+          bead.setAttribute('cx', step.x);
+          bead.setAttribute('cy', step.y);
+          bead.setAttribute('r', '7.8');
+          bead.setAttribute('stroke-width', '1.4');
+          g.appendChild(bead);
+
+          // Decade Roman Numeral Label near Decade Pater Beads
+          if (step.decade >= 1 && step.decade <= 5) {
+            const numerals = ['', 'I', 'II', 'III', 'IV', 'V'];
+            const dx = step.x - 220;
+            const dy = step.y - 190;
+            const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+            const labelX = step.x + (dx / dist) * 20;
+            const labelY = step.y + (dy / dist) * 20 + 3;
+
+            const numText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            numText.setAttribute('x', labelX.toFixed(1));
+            numText.setAttribute('y', labelY.toFixed(1));
+            numText.setAttribute('text-anchor', 'middle');
+            numText.setAttribute('class', 'font-mono text-[10px] font-semibold fill-sacred-gold dark:fill-sacred-goldLight pointer-events-none');
+            numText.textContent = numerals[step.decade];
+            chainLayer.appendChild(numText);
+          }
+
+        } else if (step.nodeType === 'doxology') {
+          // Small Golden Diamond Clasp on the Chain for Glory Be / Fatima Prayer
+          const diamond = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+          diamond.setAttribute('id', `node-shape-${step.stepIndex}`);
+          const s = 4.2;
+          diamond.setAttribute('points', `${step.x},${step.y - s} ${step.x + s},${step.y} ${step.x},${step.y + s} ${step.x - s},${step.y}`);
+          diamond.setAttribute('stroke-width', '1');
+          g.appendChild(diamond);
+
+        } else {
+          // Standard Small Ave Maria Bead
+          const bead = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          bead.setAttribute('id', `node-shape-${step.stepIndex}`);
+          bead.setAttribute('cx', step.x);
+          bead.setAttribute('cy', step.y);
+          bead.setAttribute('r', '5.2');
+          bead.setAttribute('stroke-width', '1');
+          g.appendChild(bead);
+        }
+
+        nodesLayer.appendChild(g);
+      });
+    }
+
+    function renderSvgRosaryState() {
+      const current = ROSARY_STEPS[state.currentStep];
+      const halo = document.getElementById('svgActiveHalo');
+      if (halo && current) {
+        halo.setAttribute('cx', current.x);
+        halo.setAttribute('cy', current.y + (current.nodeType === 'crucifix' ? 2 : 0));
+      }
+
+      const isDark = document.documentElement.classList.contains('dark');
+      const unvisitedFill = isDark ? 'url(#beadUnvisitedDark)' : 'url(#beadUnvisitedLight)';
+
+      ROSARY_STEPS.forEach(step => {
+        const g = document.getElementById(`rosary-node-${step.stepIndex}`);
+        const shape = document.getElementById(`node-shape-${step.stepIndex}`);
+        if (!g || !shape) return;
+
+        const isActive = step.stepIndex === state.currentStep;
+        const isCompleted = step.stepIndex < state.currentStep;
+
+        g.classList.toggle('rosary-node-active', isActive);
+
+        if (isActive) {
+          shape.setAttribute('fill', 'url(#beadActiveGrad)');
+          shape.setAttribute('stroke', '#B45309');
+          shape.setAttribute('filter', 'url(#softGlow)');
+        } else if (isCompleted) {
+          shape.setAttribute('fill', 'url(#beadCompletedGrad)');
+          shape.setAttribute('stroke', '#92400E');
+          shape.removeAttribute('filter');
+        } else {
+          if (step.nodeType === 'pater') {
+            shape.setAttribute('fill', 'url(#paterBeadGrad)');
+            shape.setAttribute('stroke', isDark ? '#60A5FA' : '#1E3A8A');
+          } else if (step.nodeType === 'crucifix' || step.nodeType === 'medallion') {
+            shape.setAttribute('fill', 'url(#beadCompletedGrad)');
+            shape.setAttribute('stroke', '#78350F');
+          } else if (step.nodeType === 'doxology') {
+            shape.setAttribute('fill', isDark ? '#334155' : '#E7E0D0');
+            shape.setAttribute('stroke', '#B48327');
+          } else {
+            shape.setAttribute('fill', unvisitedFill);
+            shape.setAttribute('stroke', isDark ? '#475569' : '#A8A29E');
+          }
+          shape.removeAttribute('filter');
+        }
+      });
+
+      // Update Center Emblem Text inside the SVG Loop
+      const activeSet = MYSTERY_SETS[state.mysterySetId];
+      document.getElementById('svgCenterMysteryTitle').textContent = activeSet.name;
+      document.getElementById('svgCenterLatinTitle').textContent = activeSet.latinName;
+
+      const centerDecadeStatus = document.getElementById('svgCenterDecadeStatus');
+      const centerSubStatus = document.getElementById('svgCenterSubStatus');
+
+      if (current.section === 'intro') {
+        centerDecadeStatus.textContent = 'Introductory Rites';
+        centerSubStatus.textContent = current.shortLabel;
+      } else if (current.section === 'closing') {
+        centerDecadeStatus.textContent = 'Closing Anthem';
+        centerSubStatus.textContent = 'Salve Regina';
+      } else {
+        const m = activeSet.mysteries[current.decade - 1];
+        centerDecadeStatus.textContent = `Decade ${current.decade} • ${m.title}`;
+        centerSubStatus.textContent = current.beadInDecade >= 1 && current.beadInDecade <= 10
+          ? `Hail Mary ${current.beadInDecade} of 10`
+          : current.shortLabel;
+      }
+    }
+
+    /*************************************************************************
+     * 8. RENDER ACTIVE PRAYER CARD & MYSTERY MEDITATION CARD
+     *************************************************************************/
+    function getPrayerText(prayerId) {
+      if (state.customPrayers[prayerId] && state.customPrayers[prayerId].trim() !== '') {
+        return state.customPrayers[prayerId];
+      }
+      return DEFAULT_PRAYER_LIBRARY[prayerId].defaultText;
+    }
+
+    function renderCurrentStepUI() {
+      const step = ROSARY_STEPS[state.currentStep];
+      const activeSet = MYSTERY_SETS[state.mysterySetId];
+      const prayerObj = DEFAULT_PRAYER_LIBRARY[step.prayerId];
+
+      // 1. Update Step & Bead Counters
+      document.getElementById('beadCounterBadge').textContent = `Step ${step.stepIndex + 1} / ${ROSARY_STEPS.length}`;
+      document.getElementById('physicalBeadLabel').textContent = step.shortLabel;
+
+      // 2. Update Mystery & Meditation Card
+      const ordinalBadge = document.getElementById('mysteryOrdinalBadge');
+      const fruitBadge = document.getElementById('mysteryFruitBadge');
+      const scriptureCitation = document.getElementById('mysteryScriptureCitation');
+      const mysteryTitle = document.getElementById('mysteryCardTitle');
+      const meditationText = document.getElementById('mysteryMeditationText');
+      const decadeStrip = document.getElementById('decadeProgressStrip');
+      const accentBar = document.getElementById('mysteryAccentBar');
+
+      accentBar.style.backgroundColor = activeSet.accentColor;
+
+      if (step.section === 'intro') {
+        ordinalBadge.textContent = `${activeSet.name} • Preparatory Rites`;
+        fruitBadge.textContent = 'Virtues: Faith, Hope & Charity';
+        scriptureCitation.textContent = 'Psalm 70:1 • Apostles’ Creed';
+        mysteryTitle.textContent = 'Entering into Contemplative Prayer';
+        meditationText.textContent = `Today we meditate upon the ${activeSet.name} (${activeSet.latinName}). Hold the Crucifix and introductory beads to recollect your heart in the presence of God and ask for an increase in Faith, Hope, and Charity.`;
+        decadeStrip.classList.add('hidden');
+      } else if (step.section === 'closing') {
+        ordinalBadge.textContent = `${activeSet.name} • Concluding Rites`;
+        fruitBadge.textContent = 'Fruit: Perseverance & Marian Intercession';
+        scriptureCitation.textContent = 'Salve Regina • Concluding Collect';
+        mysteryTitle.textContent = 'Concluding Petition at the Medallion';
+        meditationText.textContent = 'Having contemplated the five decades of the Rosary with the Blessed Virgin Mary, we conclude at the Centerpiece Medallion with the Salve Regina (Hail, Holy Queen), entrusting our intentions to her maternal care.';
+        decadeStrip.classList.add('hidden');
+      } else {
+        const mystery = activeSet.mysteries[step.decade - 1];
+        ordinalBadge.textContent = mystery.ordinal;
+        fruitBadge.textContent = `Fruit of the Mystery: ${mystery.fruit}`;
+        scriptureCitation.textContent = mystery.scripture;
+        mysteryTitle.textContent = mystery.title;
+        meditationText.textContent = mystery.meditation;
+
+        // Render 10-bead mini progress strip for the current decade
+        decadeStrip.classList.remove('hidden');
+        document.getElementById('decadeProgressLabel').textContent =
+          step.beadInDecade >= 1 && step.beadInDecade <= 10
+            ? `Hail Mary ${step.beadInDecade} of 10`
+            : step.nodeType === 'pater'
+              ? 'Decade Pater Bead (Our Father)'
+              : 'Decade Doxology (Glory Be & Fatima Prayer)';
+
+        const dotsContainer = document.getElementById('decadeMiniDots');
+        dotsContainer.innerHTML = '';
+        for (let b = 1; b <= 10; b++) {
+          const dot = document.createElement('span');
+          const isCurrentAve = step.beadInDecade === b;
+          const isPastAve = step.beadInDecade > b;
+          dot.className = isCurrentAve
+            ? 'w-3 h-3 rounded-full bg-sacred-gold ring-2 ring-sacred-gold/40 transition-all'
+            : isPastAve
+              ? 'w-2.5 h-2.5 rounded-full bg-sacred-gold/75 transition-all'
+              : 'w-2.5 h-2.5 rounded-full bg-parchment-300 dark:bg-vigil-700 transition-all';
+          dotsContainer.appendChild(dot);
+        }
+      }
+
+      // 3. Update Active Prayer Card
+      document.getElementById('prayerStepBadge').textContent = step.shortLabel;
+      document.getElementById('prayerIntentionBadge').textContent = step.intention;
+      document.getElementById('activePrayerTitle').textContent = prayerObj.title;
+      document.getElementById('activePrayerLatinTitle').textContent = prayerObj.latinTitle;
+      document.getElementById('activePrayerBody').textContent = getPrayerText(step.prayerId);
+      document.getElementById('activePrayerLatinBox').textContent = prayerObj.latinIncipit;
+
+      // Trigger subtle fade animation on prayer card content
+      const animBox = document.getElementById('prayerContentAnimated');
+      animBox.classList.remove('animate-prayer-transition');
+      void animBox.offsetWidth; // Reflow
+      animBox.classList.add('animate-prayer-transition');
+
+      // Custom status indicator
+      const isCustomized = Boolean(state.customPrayers[step.prayerId]);
+      const statusEl = document.getElementById('customTextStatusIndicator');
+      statusEl.innerHTML = isCustomized
+        ? `<span class="w-2 h-2 rounded-full bg-emerald-500"></span><span>Displaying your customized prayer text from browser storage.</span>`
+        : `<span class="w-2 h-2 rounded-full bg-sacred-gold/70"></span><span>Modular Incipit Mode &mdash; Click "Prayer Texts" to customize full wording in your browser.</span>`;
+
+      // 4. Update Navigation Buttons & Overall Progress Bar
+      document.getElementById('prevBeadBtn').disabled = state.currentStep === 0;
+      const nextBtnText = document.getElementById('nextBeadBtnText');
+      nextBtnText.textContent = state.currentStep === ROSARY_STEPS.length - 1 ? 'Complete & Restart' : 'Next Bead';
+
+      const pct = Math.round(((state.currentStep + 1) / ROSARY_STEPS.length) * 100);
+      document.getElementById('progressPercentLabel').textContent = `${pct}%`;
+      document.getElementById('overallProgressBar').style.width = `${pct}%`;
+      document.getElementById('progressSectionName').textContent =
+        step.section === 'intro'
+          ? 'Introductory Rites'
+          : step.section === 'closing'
+            ? 'Closing Prayers'
+            : `Decade ${step.decade} of 5`;
+
+      // 5. Highlight Active Decade Jump Pill
+      ['intro', 1, 2, 3, 4, 5, 'closing'].forEach(sec => {
+        const btn = document.getElementById(`jumpBtn-${sec}`);
+        if (!btn) return;
+        if (step.section === sec) {
+          btn.className = 'decade-jump-btn flex-1 py-1.5 px-2 rounded-lg text-[11px] font-mono font-bold bg-sacred-gold text-white border border-sacred-gold shadow-xs transition-all text-center';
+        } else {
+          btn.className = 'decade-jump-btn flex-1 py-1.5 px-2 rounded-lg text-[11px] font-mono font-medium bg-parchment-50 dark:bg-vigil-900 text-stone-600 dark:text-stone-300 border border-parchment-200 dark:border-vigil-700 hover:border-sacred-gold transition-all text-center';
+        }
+      });
+    }
+
+    /*************************************************************************
+     * 9. NAVIGATION ACTIONS & KEYBOARD SHORTCUTS
+     *************************************************************************/
+    function goToStep(stepIndex, playFeedback = true) {
+      if (stepIndex < 0 || stepIndex >= ROSARY_STEPS.length) return;
+      state.currentStep = stepIndex;
+      const current = ROSARY_STEPS[state.currentStep];
+
+      if (playFeedback) {
+        playRosarySound(current.nodeType);
+        triggerHaptic(current.nodeType);
+      }
+
+      renderCurrentStepUI();
+      renderSvgRosaryState();
+    }
+
+    function stepBead(delta) {
+      if (state.currentStep === ROSARY_STEPS.length - 1 && delta > 0) {
+        // Completed the Rosary -> return to Crucifix with celebratory chime
+        goToStep(0, true);
+        showToast('Rosary completed — Deo Gratias! Returned to Crucifix.');
+        return;
+      }
+      const target = Math.max(0, Math.min(ROSARY_STEPS.length - 1, state.currentStep + delta));
+      goToStep(target, true);
+    }
+
+    function jumpToSection(section) {
+      const idx = ROSARY_STEPS.findIndex(s => s.section === section);
+      if (idx !== -1) {
+        goToStep(idx, true);
+      }
+    }
+
+    function resetRosaryProgress() {
+      goToStep(0, true);
+      showToast('Returned to the Crucifix.');
+    }
+
+    function toggleLatinDisplay() {
+      state.showLatin = !state.showLatin;
+      const box = document.getElementById('activePrayerLatinBox');
+      const btn = document.getElementById('latinToggleBtn');
+      box.classList.toggle('hidden', !state.showLatin);
+      btn.textContent = state.showLatin ? 'Hide Latin Incipit' : 'Show Latin Incipit';
+    }
+
+    /*************************************************************************
+     * 10. PRAYER TEXT EDITOR MODAL & LOCALSTORAGE PERSISTENCE
+     *************************************************************************/
+    function loadStoredData() {
+      try {
+        const storedPrayers = localStorage.getItem(STORAGE_KEY_PRAYERS);
+        if (storedPrayers) {
+          state.customPrayers = JSON.parse(storedPrayers) || {};
+        }
+      } catch (e) {
+        state.customPrayers = {};
+      }
+
+      try {
+        const storedSettings = localStorage.getItem(STORAGE_KEY_SETTINGS);
+        if (storedSettings) {
+          const parsed = JSON.parse(storedSettings);
+          if (typeof parsed.audioEnabled === 'boolean') state.audioEnabled = parsed.audioEnabled;
+          if (typeof parsed.hapticsEnabled === 'boolean') state.hapticsEnabled = parsed.hapticsEnabled;
+          if (typeof parsed.darkMode === 'boolean') state.darkMode = parsed.darkMode;
+        }
+      } catch (e) {
+        // Use defaults
+      }
+    }
+
+    function saveSettings() {
+      try {
+        localStorage.setItem(STORAGE_KEY_SETTINGS, JSON.stringify({
+          audioEnabled: state.audioEnabled,
+          hapticsEnabled: state.hapticsEnabled,
+          darkMode: state.darkMode
+        }));
+      } catch (e) {
+        // Ignore storage quota errors
+      }
+    }
+
+    function populateEditorDropdown(selectedPrayerId) {
+      const select = document.getElementById('editorPrayerSelect');
+      select.innerHTML = '';
+      Object.values(DEFAULT_PRAYER_LIBRARY).forEach(prayer => {
+        const opt = document.createElement('option');
+        opt.value = prayer.id;
+        const isCustom = Boolean(state.customPrayers[prayer.id]);
+        opt.textContent = `${prayer.title}${isCustom ? ' (Customized)' : ''}`;
+        if (prayer.id === selectedPrayerId) opt.selected = true;
+        select.appendChild(opt);
+      });
+      handleEditorPrayerChange();
+    }
+
+    function handleEditorPrayerChange() {
+      const prayerId = document.getElementById('editorPrayerSelect').value;
+      const prayer = DEFAULT_PRAYER_LIBRARY[prayerId];
+      if (!prayer) return;
+
+      document.getElementById('editorMetaTitle').textContent = prayer.title;
+      document.getElementById('editorMetaLatin').textContent = prayer.latinTitle;
+      document.getElementById('editorPrayerTextarea').value = getPrayerText(prayerId);
+    }
+
+    function openPrayerEditorModal(prayerId) {
+      const targetId = prayerId || ROSARY_STEPS[state.currentStep].prayerId;
+      populateEditorDropdown(targetId);
+      const modal = document.getElementById('prayerEditorModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function openPrayerEditorForCurrent() {
+      const currentPrayerId = ROSARY_STEPS[state.currentStep].prayerId;
+      openPrayerEditorModal(currentPrayerId);
+    }
+
+    function closePrayerEditorModal() {
+      const modal = document.getElementById('prayerEditorModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function savePrayerFromEditor() {
+      const prayerId = document.getElementById('editorPrayerSelect').value;
+      const newText = document.getElementById('editorPrayerTextarea').value.trim();
+
+      if (newText === '' || newText === DEFAULT_PRAYER_LIBRARY[prayerId].defaultText) {
+        delete state.customPrayers[prayerId];
+      } else {
+        state.customPrayers[prayerId] = newText;
+      }
+
+      try {
+        localStorage.setItem(STORAGE_KEY_PRAYERS, JSON.stringify(state.customPrayers));
+      } catch (e) {
+        // Ignore storage error
+      }
+
+      populateEditorDropdown(prayerId);
+      renderCurrentStepUI();
+      closePrayerEditorModal();
+      showToast('Prayer text saved to localStorage.');
+    }
+
+    function resetCurrentPrayerToDefault() {
+      const prayerId = document.getElementById('editorPrayerSelect').value;
+      delete state.customPrayers[prayerId];
+      try {
+        localStorage.setItem(STORAGE_KEY_PRAYERS, JSON.stringify(state.customPrayers));
+      } catch (e) {}
+      document.getElementById('editorPrayerTextarea').value = DEFAULT_PRAYER_LIBRARY[prayerId].defaultText;
+      populateEditorDropdown(prayerId);
+      renderCurrentStepUI();
+      showToast('Restored default modular incipit.');
+    }
+
+    function resetAllPrayersToDefault() {
+      state.customPrayers = {};
+      try {
+        localStorage.removeItem(STORAGE_KEY_PRAYERS);
+      } catch (e) {}
+      const prayerId = document.getElementById('editorPrayerSelect').value;
+      populateEditorDropdown(prayerId);
+      renderCurrentStepUI();
+      showToast('All prayers reset to default incipits.');
+    }
+
+    /*************************************************************************
+     * 11. AUDIO, HAPTICS, THEME & TOOLTIP HELPERS
+     *************************************************************************/
+    function toggleAudio() {
+      state.audioEnabled = !state.audioEnabled;
+      saveSettings();
+      updateUtilityButtonsUI();
+      if (state.audioEnabled) playRosarySound('ave');
+      showToast(state.audioEnabled ? 'Synthesized Rosary audio enabled' : 'Audio muted');
+    }
+
+    function toggleHaptics() {
+      state.hapticsEnabled = !state.hapticsEnabled;
+      saveSettings();
+      updateUtilityButtonsUI();
+      if (state.hapticsEnabled) triggerHaptic('ave');
+      showToast(state.hapticsEnabled ? 'Tactile haptics enabled' : 'Haptics disabled');
+    }
+
+    function toggleTheme() {
+      state.darkMode = !state.darkMode;
+      applyTheme();
+      saveSettings();
+      renderSvgRosaryState();
+    }
+
+    function applyTheme() {
+      const htmlEl = document.documentElement;
+      if (state.darkMode) {
+        htmlEl.classList.add('dark');
+        htmlEl.classList.remove('light');
+      } else {
+        htmlEl.classList.remove('dark');
+        htmlEl.classList.add('light');
+      }
+      document.getElementById('themeIconSun').classList.toggle('hidden', !state.darkMode);
+      document.getElementById('themeIconMoon').classList.toggle('hidden', state.darkMode);
+    }
+
+    function updateUtilityButtonsUI() {
+      document.getElementById('audioIconOn').classList.toggle('hidden', !state.audioEnabled);
+      document.getElementById('audioIconOff').classList.toggle('hidden', state.audioEnabled);
+
+      const hapticIcon = document.getElementById('hapticIcon');
+      if (state.hapticsEnabled) {
+        hapticIcon.classList.remove('text-stone-400');
+        hapticIcon.classList.add('text-sacred-gold', 'dark:text-sacred-goldLight');
+      } else {
+        hapticIcon.classList.add('text-stone-400');
+        hapticIcon.classList.remove('text-sacred-gold', 'dark:text-sacred-goldLight');
+      }
+    }
+
+    function showBeadTooltip(e, text) {
+      const tip = document.getElementById('beadTooltip');
+      tip.textContent = text;
+      tip.classList.remove('hidden');
+      moveBeadTooltip(e);
+    }
+
+    function moveBeadTooltip(e) {
+      const tip = document.getElementById('beadTooltip');
+      tip.style.left = `${e.clientX + 14}px`;
+      tip.style.top = `${e.clientY - 28}px`;
+    }
+
+    function hideBeadTooltip() {
+      document.getElementById('beadTooltip').classList.add('hidden');
+    }
+
+    let toastTimer = null;
+    function showToast(msg) {
+      const banner = document.getElementById('toastBanner');
+      document.getElementById('toastMessage').textContent = msg;
+      banner.classList.remove('hidden');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        banner.classList.add('hidden');
+      }, 2600);
+    }
+
+    /*************************************************************************
+     * 12. INITIALIZATION & KEYBOARD LISTENERS
+     *************************************************************************/
+    window.addEventListener('keydown', (e) => {
+      // Do not intercept keys if user is typing in the Prayer Editor Modal
+      const modal = document.getElementById('prayerEditorModal');
+      if (!modal.classList.contains('hidden')) {
+        if (e.key === 'Escape') closePrayerEditorModal();
+        return;
+      }
+
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        stepBead(1);
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        stepBead(-1);
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadStoredData();
+      applyTheme();
+      updateUtilityButtonsUI();
+      buildRosarySteps();
+      buildSvgRosaryElements();
+      detectTodaysMystery();
+      updateMysteryHeaderUI();
+      renderCurrentStepUI();
+      renderSvgRosaryState();
+    });
+  </script>
+</body>
+</html>
